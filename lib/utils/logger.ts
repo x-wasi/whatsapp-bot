@@ -33,4 +33,4 @@ const Logger = function (
 	};
 };
 
-export const logger = Logger("debug");
+export const logger = Logger("silent");

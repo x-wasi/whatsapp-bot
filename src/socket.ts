@@ -9,7 +9,7 @@ import cache from "./cache";
 import event from "./event";
 import config from "../config";
 import { cachedGroupMetadata } from "./group";
-import { Green, logger, StoreDb } from "lib";
+import { Green, logger, Red, StoreDb } from "lib";
 
 const msgRetryCounterCache = cache();
 
@@ -34,4 +34,4 @@ if (!sock.authState?.creds?.registered) {
 	while (!sock.authState?.creds?.registered) await delay(1000);
 }
 
-await event(sock, saveCreds).catch(console.error);
+await event(sock, saveCreds).catch(Red);

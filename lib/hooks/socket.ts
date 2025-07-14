@@ -1,4 +1,5 @@
 import { updateMetaGroup } from "src";
+import { Red } from "lib";
 import type { GroupMetadata, WASocket } from "baileys";
 
 export function socketHooks(sock: WASocket) {
@@ -24,7 +25,7 @@ export const fetchAndUpdateGroups = async (sock: WASocket) => {
 			}
 		}
 	} catch (error) {
-		console.error("Error in fetchAndUpdateGroups:", error);
+		Red(error);
 	}
 };
 

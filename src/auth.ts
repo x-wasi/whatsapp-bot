@@ -10,7 +10,7 @@ sqlite.exec(`
 	);
 `);
 
-export default function () {
+export default () => {
 	function writeData(data: any, name: string) {
 		const exists = sqlite.query("SELECT 1 FROM auth WHERE name = ?").get(name);
 		const serializedData = JSON.stringify(data, BufferJSON.replacer);
@@ -88,4 +88,4 @@ export default function () {
 			writeData(creds, "creds");
 		},
 	};
-}
+};

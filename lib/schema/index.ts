@@ -1,6 +1,15 @@
 export { default as AliveDb } from "./alive";
+export { default as AntiCallDb } from "./anticall";
 export { default as AntiDelDb } from "./antidel";
+export { default as AntilinkDb } from "./antilink";
+export { default as AntiWordDb } from "./antiword";
+export { default as AutoMuteDb } from "./automute";
+export { default as BanDb } from "./ban";
 export { default as ContactDb } from "./contact";
+export { default as filtersDb } from "./filters";
+export { default as Greetings } from "./greetings";
+export { default as GroupDb } from "./group";
+export { default as Settings } from "./settings";
 export { default as StickerDb } from "./sticker";
 export { default as StoreDb } from "./store";
 export { default as SudoDb } from "./sudo";

@@ -1,16 +1,14 @@
 import { commandMap } from "./plugin";
-import { StickerDb } from "lib";
+import { Red, StickerDb } from "lib";
 import type { CommandModule } from "@types";
 import type { Serialize } from "./serialize";
 
 function exec(cmd: CommandModule, msg: Serialize, match?: string) {
-	cmd.handler(msg, match).catch(console.error);
+	cmd.handler(msg, match).catch(Red);
 }
 
 function text(msg: Serialize) {
 	if (!msg?.text) return;
-
-	msg.text = msg.text.replace(/[^\w\s]|_/g, "");
 
 	for (const [, cmd] of commandMap) {
 		if (!cmd.patternRegex) continue;
