@@ -1,6 +1,5 @@
 import { Readable } from "node:stream";
-import { get } from "node:https";
-import { request as httpRequest } from "node:http";
+import { request } from "undici";
 
 interface DataTypeResult {
 	mimetype: string;
@@ -149,13 +148,16 @@ const normalizeToBuffer = async (
 	return Buffer.concat(chunks);
 };
 
-const fetchUrlToBuffer = async (url: URL): Promise<Buffer> =>
-	new Promise((resolve, reject) => {
-		const req = (url.protocol === "https:" ? get : httpRequest)(url, res => {
-			const chunks: Buffer[] = [];
-			res.on("data", d => chunks.push(d));
-			res.on("end", () => resolve(Buffer.concat(chunks)));
-		});
-		req.on("error", reject);
-		if (req instanceof httpRequest) req.end();
+const fetchUrlToBuffer = async (url: URL): Promise<Buffer> => {
+	const { statusCode, headers, body } = await request(url, {
+		method: "GET",
+		maxRedirections: 5,
+		throwOnError: true,
 	});
+
+	if (statusCode < 200 || statusCode >= 300) {
+		throw new Error(`HTTP ${statusCode}: Failed to fetch ${url}`);
+	}
+
+	return Buffer.from(await body.arrayBuffer());
+};

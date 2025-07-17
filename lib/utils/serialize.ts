@@ -1,5 +1,5 @@
 import { jidNormalizedUser, normalizeMessageContent } from "baileys";
-import { extractTxt } from "./constants";
+import { extractTxt, isAdmin, isBotAdmin, Settings } from "lib";
 import { downloadMessage, edit, send, deleteM, forwardM, userId } from "./sock";
 import type { sendOptions } from "./sock";
 import type {
@@ -8,7 +8,6 @@ import type {
 	WAMessageContent,
 	WASocket,
 } from "baileys";
-import { isAdmin, isBotAdmin } from "./admin";
 
 export async function serialize(sock: WASocket, msg: WAMessage) {
 	let { key, message, broadcast, pushName } = msg;
@@ -46,6 +45,8 @@ export async function serialize(sock: WASocket, msg: WAMessage) {
 		quotedM = quoted ? quoted.quotedMessage : undefined;
 	}
 
+	const prefix = Settings.prefix.get();
+
 	return {
 		chat,
 		key,
@@ -54,6 +55,7 @@ export async function serialize(sock: WASocket, msg: WAMessage) {
 		owner,
 		mtype,
 		pushName,
+		prefix,
 		sender:
 			isGroup || broadcast
 				? key.participant
@@ -84,6 +86,7 @@ export async function serialize(sock: WASocket, msg: WAMessage) {
 						broadcast: Boolean(quoted?.remoteJid),
 						sender: quoted.participant,
 						message: quotedM,
+						mtype: quotedType,
 						text: extractTxt(message),
 						//@ts-ignore
 						viewonce: !!quotedM?.[quotedType]?.viewOnce,

@@ -2,7 +2,7 @@ import { Readable } from "stream";
 import { isUrl } from "../constants";
 import { getBuffer } from "../fetch";
 import { DataType } from "../datatype";
-import type { WAMessage, WASocket } from "baileys";
+import type { WAContextInfo, WAMessage, WASocket } from "baileys";
 
 export type sendOptions = {
 	to: string;
@@ -12,6 +12,7 @@ export type sendOptions = {
 	fileName?: string;
 	mentions?: string[];
 	quoted?: WAMessage;
+	contextInfo?: WAContextInfo;
 };
 
 export async function send(

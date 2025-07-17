@@ -3,12 +3,15 @@ export { default as AntiCallDb } from "./anticall";
 export { default as AntiDelDb } from "./antidel";
 export { default as AntilinkDb } from "./antilink";
 export { default as AntiWordDb } from "./antiword";
+export { default as AutoBioDb } from "./autobio";
+export { default as AutoKickDb } from "./autokick";
 export { default as AutoMuteDb } from "./automute";
 export { default as BanDb } from "./ban";
 export { default as ContactDb } from "./contact";
 export { default as filtersDb } from "./filters";
 export { default as Greetings } from "./greetings";
 export { default as GroupDb } from "./group";
+export * from './leaderboard'
 export { default as Settings } from "./settings";
 export { default as StickerDb } from "./sticker";
 export { default as StoreDb } from "./store";

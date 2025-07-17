@@ -1,5 +1,7 @@
-import { Green, StoreDb, serialize, execute, Serialize } from "lib";
-import type { WASocket, BaileysEventMap } from "baileys";
+import { isJidGroup } from "baileys";
+import { Green, StoreDb, serialize, execute, Serialize, AntiDelDb } from "lib";
+import { forwardM } from "lib/utils/sock";
+import type { BaileysEventMap, WASocket } from "baileys";
 
 export async function messagesUpsert(
 	sock: WASocket,
@@ -25,7 +27,23 @@ export async function messagesDelete(
 	sock: WASocket,
 	event: BaileysEventMap["messages.delete"]
 ) {
-	Green("Message deleted:", event);
+	if (AntiDelDb.get()) {
+		if ("keys" in event) {
+			const keys = event.keys;
+
+			for (const key of keys) {
+				const msg = StoreDb.load(key);
+
+				if (msg && !msg.key.fromMe) {
+					const jid = String(
+						isJidGroup(msg.key.remoteJid!) ? msg.key.remoteJid : sock.user?.id
+					);
+
+					return await forwardM(sock, jid, msg, { quoted: msg });
+				}
+			}
+		}
+	}
 }
 
 function _callCommands(msg: Serialize) {

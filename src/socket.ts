@@ -1,9 +1,4 @@
-import {
-	makeWASocket,
-	makeCacheableSignalKeyStore,
-	fetchLatestWaWebVersion,
-	delay,
-} from "baileys";
+import makeWASocket, { fetchLatestWaWebVersion } from "baileys";
 import auth from "./auth";
 import cache from "./cache";
 import event from "./event";
@@ -13,13 +8,13 @@ import { Green, logger, Red, StoreDb } from "lib";
 
 const msgRetryCounterCache = cache();
 
-const { state, saveCreds } = auth();
+const { state } = auth();
 const { version } = await fetchLatestWaWebVersion({});
 
 const sock = makeWASocket({
 	auth: {
 		creds: state.creds,
-		keys: makeCacheableSignalKeyStore(state.keys, logger),
+		keys: state.keys,
 	},
 	version,
 	logger,
@@ -29,9 +24,10 @@ const sock = makeWASocket({
 });
 
 if (!sock.authState?.creds?.registered) {
-	await delay(2000);
+	await new Promise(r => setTimeout(r, 2000));
 	Green(`PAIR:`, await sock.requestPairingCode(config.USER_NUMBER, "ASTROX11"));
-	while (!sock.authState?.creds?.registered) await delay(1000);
+	while (!sock.authState?.creds?.registered)
+		await new Promise(r => setTimeout(r, 2000));
 }
 
-await event(sock, saveCreds).catch(Red);
+await event(sock).catch(Red);

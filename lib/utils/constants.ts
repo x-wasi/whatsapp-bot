@@ -1,4 +1,5 @@
 import { getContentType, type WAMessage, type WAMessageContent } from "baileys";
+import { getQuote } from "lib/resources";
 
 export function extractTxt(
 	message?: WAMessageContent
@@ -58,3 +59,59 @@ export const formatRuntime = (uptime: number): string => {
 	const seconds = Math.floor(uptime % 60);
 	return `${hours}h ${minutes}m ${seconds}s`;
 };
+
+export function getBio(): string {
+	const now = new Date();
+	const date = now.toLocaleDateString("en-PK");
+	const time = now.toLocaleTimeString("en-PK");
+	const quote = getQuote();
+	return `${quote} | 📅 ${date} | 🕒 ${time} | ⚡ Powered Xstro`;
+}
+
+export function fancy(text: any): string {
+	const fancyMap: Record<string, string> = {
+		a: "ᴀ",
+		b: "ʙ",
+		c: "ᴄ",
+		d: "ᴅ",
+		e: "ᴇ",
+		f: "ғ",
+		g: "ɢ",
+		h: "ʜ",
+		i: "ɪ",
+		j: "ᴊ",
+		k: "ᴋ",
+		l: "ʟ",
+		m: "ᴍ",
+		n: "ɴ",
+		o: "ᴏ",
+		p: "ᴘ",
+		q: "ǫ",
+		r: "ʀ",
+		s: "s",
+		t: "ᴛ",
+		u: "ᴜ",
+		v: "ᴠ",
+		w: "ᴡ",
+		x: "x",
+		y: "ʏ",
+		z: "ᴢ",
+
+		"0": "𝟬",
+		"1": "𝟭",
+		"2": "𝟮",
+		"3": "𝟯",
+		"4": "𝟰",
+		"5": "𝟱",
+		"6": "𝟲",
+		"7": "𝟳",
+		"8": "𝟴",
+		"9": "𝟵",
+	};
+
+	return String(text)
+		.toLowerCase()
+		.split("")
+		.map(char => fancyMap[char] || char)
+		.join("");
+}

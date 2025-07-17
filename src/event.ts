@@ -5,13 +5,13 @@ import {
 	messagesUpsert,
 	messagesDelete,
 	contact,
+	participants,
+	groupRequests,
 } from "./services";
 
-export default async (sock: WASocket, saveCreds: { (): void }) => {
+export default async (sock: WASocket) => {
 	return await Promise.allSettled([
 		sock.ev.process(async ev => {
-			if (ev["creds.update"]) saveCreds();
-
 			if (ev["connection.update"]) {
 				await connection(ev["connection.update"], sock);
 			}
@@ -32,6 +32,12 @@ export default async (sock: WASocket, saveCreds: { (): void }) => {
 			}
 			if (ev["contacts.upsert"]) {
 				contact(ev["contacts.upsert"]);
+			}
+			if (ev["group-participants.update"]) {
+				await participants(sock, ev["group-participants.update"]);
+			}
+			if (ev["group.join-request"]) {
+				await groupRequests(sock, ev["group.join-request"]);
 			}
 		}),
 		hooks(sock),

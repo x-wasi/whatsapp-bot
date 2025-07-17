@@ -11,8 +11,7 @@ sqlite.exec(`
 
 export default {
 	add: (jid: string, lid: string) => {
-		if (!isJidUser(jid)) throw new Error("Invalid JID format");
-		if (!isLidUser(lid)) throw new Error("Invalid LID format");
+		if (!isJidUser(jid) || !isLidUser(lid)) return;
 
 		const exists = sqlite.query("SELECT 1 FROM ban_user WHERE jid = ?").get(jid);
 		if (!exists) {

@@ -1,4 +1,5 @@
-import { commandMap } from "../utils";
+import config from "../../config";
+import { commandMap, fancy } from "../utils";
 import { CommandModule } from "@types";
 
 export default {
@@ -29,12 +30,12 @@ export default {
 			}
 		}
 
-		let menu = "📋 *Available Commands*\n\n";
+		let menu = "" + fancy(`*${config.BOT_NAME ?? "Xstro"} Commands*`) + "\n\n";
 
 		for (const [category, commands] of categories) {
-			menu += `*${category}*\n`;
+			menu += fancy(`*${category}*\n`);
 			commands.forEach((cmd, index) => {
-				menu += `${index + 1}. ${cmd}\n`;
+				menu += fancy(`${index + 1}. ${cmd}\n`);
 			});
 			menu += "\n";
 		}
